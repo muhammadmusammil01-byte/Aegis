@@ -10,6 +10,12 @@ const transactionRoutes = require('./routes/transactions');
 const marketplaceRoutes = require('./routes/marketplace');
 const userRoutes = require('./routes/users');
 const adminRoutes = require('./routes/admin');
+const creatorRoutes = require('./routes/creator');
+const distributorRoutes = require('./routes/distributor');
+const consumerRoutes = require('./routes/consumer');
+
+// Import auth middleware
+const { authenticateToken, getCurrentUser } = require('./middleware/auth');
 
 const app = express();
 
@@ -27,6 +33,12 @@ app.use('/api/transactions', transactionRoutes);
 app.use('/api/marketplace', marketplaceRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/creator', creatorRoutes);
+app.use('/api/distributor', distributorRoutes);
+app.use('/api/consumer', consumerRoutes);
+
+// Auth endpoint
+app.get('/api/auth/me', authenticateToken, getCurrentUser);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

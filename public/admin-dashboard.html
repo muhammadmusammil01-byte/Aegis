@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - AEGIS</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <div class="nav-brand">
+        <a href="/">
+          <h1>🛡️ AEGIS</h1>
+          <span class="tagline">Admin Command Center</span>
+        </a>
+      </div>
+      <div class="nav-links" id="navLinks">
+        <a href="/admin-dashboard.html" class="active">Dashboard</a>
+        <a href="/admin-users.html">Users</a>
+        <a href="/admin-content.html">Content</a>
+        <a href="/admin-audit.html">Audit Log</a>
+        <a href="#" id="logoutLink">Logout</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="page-header">
+    <div class="container">
+      <h1>Admin Dashboard</h1>
+      <p id="welcomeMessage">Welcome, Admin</p>
+    </div>
+  </section>
+
+  <section class="dashboard-content">
+    <div class="container">
+      
+      <!-- KPI Cards -->
+      <div class="dashboard-stats">
+        <div class="stat-card">
+          <h3>Total Revenue</h3>
+          <div class="stat-value" id="totalRevenue">$0</div>
+          <p class="stat-detail">All-time transaction volume</p>
+        </div>
+        <div class="stat-card">
+          <h3>Platform Fees</h3>
+          <div class="stat-value" id="platformFees">$0</div>
+          <p class="stat-detail">5% of all transactions</p>
+        </div>
+        <div class="stat-card">
+          <h3>Total Users</h3>
+          <div class="stat-value" id="totalUsers">0</div>
+          <p class="stat-detail">All registered accounts</p>
+        </div>
+        <div class="stat-card">
+          <h3>Active Content</h3>
+          <div class="stat-value" id="activeContent">0</div>
+          <p class="stat-detail">Live in marketplace</p>
+        </div>
+        <div class="stat-card">
+          <h3>Verification Rate</h3>
+          <div class="stat-value" id="verificationRate">0%</div>
+          <p class="stat-detail">Success rate</p>
+        </div>
+        <div class="stat-card">
+          <h3>Licenses Sold</h3>
+          <div class="stat-value" id="licensesSold">0</div>
+          <p class="stat-detail">Total rights issued</p>
+        </div>
+      </div>
+
+      <!-- Charts & Analytics Section -->
+      <div class="analytics-grid">
+        
+        <!-- User Distribution -->
+        <div class="analytics-card">
+          <h2>User Distribution</h2>
+          <div id="userDistribution"></div>
+        </div>
+
+        <!-- Platform Activity -->
+        <div class="analytics-card">
+          <h2>Content by Platform</h2>
+          <div id="platformBreakdown"></div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="analytics-card full-width">
+          <h2>Recent Transactions</h2>
+          <div id="recentTransactions"></div>
+        </div>
+
+        <!-- Pending Actions -->
+        <div class="analytics-card full-width">
+          <h2>Items Requiring Attention</h2>
+          <div id="pendingActions"></div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2024 AEGIS Rights Broker. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="/js/auth.js"></script>
+  <script src="/js/admin-dashboard.js"></script>
+</body>
+</html>

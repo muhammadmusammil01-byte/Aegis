@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creator Dashboard - AEGIS</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <div class="nav-brand">
+        <a href="/">
+          <h1>🛡️ AEGIS</h1>
+          <span class="tagline">Creator Command Center</span>
+        </a>
+      </div>
+      <div class="nav-links" id="navLinks">
+        <a href="/creator-dashboard.html" class="active">Dashboard</a>
+        <a href="/creator-verify.html">Submit Content</a>
+        <a href="/creator-catalog.html">My Catalog</a>
+        <a href="/marketplace.html">Marketplace</a>
+        <a href="#" id="logoutLink">Logout</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="page-header">
+    <div class="container">
+      <h1>Creator Dashboard</h1>
+      <p id="welcomeMessage">Welcome, Creator</p>
+    </div>
+  </section>
+
+  <section class="dashboard-content">
+    <div class="container">
+      
+      <!-- Earnings Overview -->
+      <div class="earnings-highlight">
+        <div class="earnings-main">
+          <h2>Total Earnings</h2>
+          <div class="earnings-amount" id="totalEarnings">$0.00</div>
+          <div class="earnings-breakdown">
+            <div class="earnings-item">
+              <span class="earnings-label">Primary Sales (95%)</span>
+              <span class="earnings-value" id="primaryEarnings">$0.00</span>
+            </div>
+            <div class="earnings-item">
+              <span class="earnings-label">Resale Royalties (10%)</span>
+              <span class="earnings-value" id="passiveEarnings">$0.00</span>
+            </div>
+          </div>
+        </div>
+        <div class="earnings-side">
+          <h3>Current Balance</h3>
+          <div class="balance-amount" id="currentBalance">$0.00</div>
+          <button class="btn btn-primary">Withdraw</button>
+        </div>
+      </div>
+
+      <!-- Stats Grid -->
+      <div class="dashboard-stats">
+        <div class="stat-card">
+          <h3>Total Content</h3>
+          <div class="stat-value" id="totalContent">0</div>
+        </div>
+        <div class="stat-card">
+          <h3>Active</h3>
+          <div class="stat-value" id="activeContentCount">0</div>
+        </div>
+        <div class="stat-card">
+          <h3>Pending</h3>
+          <div class="stat-value" id="pendingContent">0</div>
+        </div>
+        <div class="stat-card">
+          <h3>Licenses Sold</h3>
+          <div class="stat-value" id="licensesSold">0</div>
+        </div>
+      </div>
+
+      <!-- Earnings Breakdown Table -->
+      <div class="earnings-section">
+        <h2>Earnings Breakdown</h2>
+        <div class="table-container">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>License ID</th>
+                <th>Content</th>
+                <th>Buyer</th>
+                <th>Type</th>
+                <th>Purchase Price</th>
+                <th>Your Earnings</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody id="earningsTable">
+              <tr>
+                <td colspan="7" class="loading">Loading earnings...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="quick-actions">
+        <h2>Quick Actions</h2>
+        <div class="action-grid">
+          <a href="/creator-verify.html" class="action-card">
+            <div class="action-icon">📝</div>
+            <h3>Submit New Content</h3>
+            <p>Add a social media link to the marketplace</p>
+          </a>
+          <a href="/creator-catalog.html" class="action-card">
+            <div class="action-icon">📊</div>
+            <h3>Manage Catalog</h3>
+            <p>View and adjust prices for your content</p>
+          </a>
+          <a href="/marketplace.html" class="action-card">
+            <div class="action-icon">🏪</div>
+            <h3>Browse Marketplace</h3>
+            <p>See what others are selling</p>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2024 AEGIS Rights Broker. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="/js/auth.js"></script>
+  <script src="/js/creator-dashboard.js"></script>
+</body>
+</html>
