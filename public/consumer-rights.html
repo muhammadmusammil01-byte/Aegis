@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Rights - AEGIS</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <div class="nav-brand">
+        <a href="/">
+          <h1>🛡️ AEGIS</h1>
+          <span class="tagline">Rights Broker</span>
+        </a>
+      </div>
+      <div class="nav-links">
+        <a href="/marketplace.html">Marketplace</a>
+        <a href="/creator-verify.html">Creator Portal</a>
+        <a href="/consumer-rights.html" class="active">My Rights</a>
+        <a href="/admin-users.html">Admin</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="page-header">
+    <div class="container">
+      <h1>My Rights Dashboard</h1>
+      <p>View and manage your purchased rights certificates</p>
+    </div>
+  </section>
+
+  <section class="dashboard-content">
+    <div class="container">
+      
+      <div class="user-login">
+        <div class="form-group">
+          <label>Your User ID:</label>
+          <input type="text" id="userId" placeholder="Enter your User ID">
+          <button id="loadDashboard" class="btn btn-primary">Load Dashboard</button>
+        </div>
+      </div>
+
+      <div id="dashboardView" style="display: none;">
+        
+        <div class="dashboard-stats">
+          <div class="stat-card">
+            <h3>Total Licenses</h3>
+            <div class="stat-value" id="totalLicenses">0</div>
+          </div>
+          <div class="stat-card">
+            <h3>Available for Resale</h3>
+            <div class="stat-value" id="resaleLicenses">0</div>
+          </div>
+          <div class="stat-card">
+            <h3>Total Investment</h3>
+            <div class="stat-value" id="totalInvestment">$0</div>
+          </div>
+        </div>
+
+        <div class="licenses-section">
+          <h2>My Licenses</h2>
+          <div id="licensesList" class="licenses-grid"></div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2024 AEGIS Rights Broker. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- License Details Modal -->
+  <div id="licenseModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>License Details</h2>
+      <div id="licenseDetails"></div>
+      <div class="modal-actions">
+        <button id="downloadCertificate" class="btn btn-secondary">Download Certificate</button>
+        <button id="toggleResale" class="btn btn-primary">List for Resale</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Resale Modal -->
+  <div id="resaleModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>List License for Resale</h2>
+      <div class="form-group">
+        <label>Resale Price ($):</label>
+        <input type="number" id="resalePrice" placeholder="Enter resale price" min="0" step="0.01">
+        <p class="help-text">Original creator will receive 10% royalty on resale</p>
+      </div>
+      <div class="modal-actions">
+        <button id="confirmResale" class="btn btn-primary">Confirm Listing</button>
+        <button id="cancelResale" class="btn btn-secondary">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/consumer-rights.js"></script>
+</body>
+</html>

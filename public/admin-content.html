@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Content - AEGIS</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <div class="nav-brand">
+        <a href="/">
+          <h1>🛡️ AEGIS</h1>
+          <span class="tagline">Rights Broker</span>
+        </a>
+      </div>
+      <div class="nav-links">
+        <a href="/marketplace.html">Marketplace</a>
+        <a href="/creator-verify.html">Creator Portal</a>
+        <a href="/consumer-rights.html">My Rights</a>
+        <a href="/admin-users.html">Admin</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="page-header">
+    <div class="container">
+      <h1>Admin Dashboard - Content Moderation</h1>
+      <p>Manage and moderate content links</p>
+    </div>
+  </section>
+
+  <section class="admin-content">
+    <div class="container">
+      
+      <div class="admin-tabs">
+        <a href="/admin-users.html" class="tab-btn">Users</a>
+        <button class="tab-btn active">Content Management</button>
+      </div>
+
+      <div class="admin-actions">
+        <div class="filter-group">
+          <select id="statusFilter">
+            <option value="">All Status</option>
+            <option value="Pending">Pending</option>
+            <option value="Active">Active</option>
+            <option value="TakenDown">Taken Down</option>
+            <option value="Rejected">Rejected</option>
+          </select>
+          <select id="platformFilter">
+            <option value="">All Platforms</option>
+            <option value="Instagram">Instagram</option>
+            <option value="YouTube">YouTube</option>
+            <option value="TikTok">TikTok</option>
+            <option value="Twitter">Twitter</option>
+            <option value="Facebook">Facebook</option>
+          </select>
+          <button id="applyContentFilters" class="btn btn-secondary">Apply Filters</button>
+        </div>
+      </div>
+
+      <div class="table-container">
+        <table id="contentTable" class="admin-table">
+          <thead>
+            <tr>
+              <th>Content ID</th>
+              <th>Platform</th>
+              <th>Creator</th>
+              <th>Source URL</th>
+              <th>Status</th>
+              <th>Price</th>
+              <th>Created</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="contentTableBody">
+            <tr>
+              <td colspan="8" class="loading">Loading content...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div id="contentPagination" class="pagination"></div>
+
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2024 AEGIS Rights Broker. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Content Details Modal -->
+  <div id="contentModal" class="modal">
+    <div class="modal-content modal-large">
+      <span class="close">&times;</span>
+      <h2>Content Moderation</h2>
+      <div id="contentDetails"></div>
+      <div class="modal-actions">
+        <button class="btn btn-success status-btn" data-status="Active">Approve</button>
+        <button class="btn btn-danger status-btn" data-status="Rejected">Reject</button>
+        <button class="btn btn-warning status-btn" data-status="TakenDown">Take Down</button>
+        <button class="btn btn-danger delete-btn">Delete Permanently</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/admin-links.js"></script>
+</body>
+</html>

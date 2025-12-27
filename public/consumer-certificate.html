@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Certificates - AEGIS</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <div class="nav-brand">
+        <a href="/">
+          <h1>🛡️ AEGIS</h1>
+          <span class="tagline">Consumer Command Center</span>
+        </a>
+      </div>
+      <div class="nav-links" id="navLinks">
+        <a href="/consumer-library.html">My Library</a>
+        <a href="/consumer-certificate.html" class="active">Certificates</a>
+        <a href="/consumer-resale.html">Resale Market</a>
+        <a href="/marketplace.html">Browse</a>
+        <a href="#" id="logoutLink">Logout</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="page-header">
+    <div class="container">
+      <h1>My Usage Certificates</h1>
+      <p>Legal proof of your commercial usage rights</p>
+    </div>
+  </section>
+
+  <section class="certificates-content">
+    <div class="container">
+      
+      <div id="certificatesList" class="certificates-grid">
+        <div class="loading">Loading certificates...</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Certificate Viewer Modal -->
+  <div id="certModal" class="modal">
+    <div class="modal-content modal-large">
+      <span class="close">&times;</span>
+      <h2>Digital Rights Certificate</h2>
+      <div id="certViewer" class="certificate-viewer"></div>
+      <div class="modal-actions">
+        <button id="downloadPDF" class="btn btn-primary">Download PDF</button>
+        <button id="downloadJSON" class="btn btn-secondary">Download JSON</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2024 AEGIS Rights Broker. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="/js/auth.js"></script>
+  <script src="/js/consumer-certificate.js"></script>
+</body>
+</html>

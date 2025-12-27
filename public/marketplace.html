@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marketplace - AEGIS</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <div class="nav-brand">
+        <a href="/">
+          <h1>🛡️ AEGIS</h1>
+          <span class="tagline">Rights Broker</span>
+        </a>
+      </div>
+      <div class="nav-links">
+        <a href="/marketplace.html" class="active">Marketplace</a>
+        <a href="/creator-verify.html">Creator Portal</a>
+        <a href="/consumer-rights.html">My Rights</a>
+        <a href="/admin-users.html">Admin</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="page-header">
+    <div class="container">
+      <h1>Rights Marketplace</h1>
+      <p>Browse and purchase commercial usage rights to verified social media content</p>
+    </div>
+  </section>
+
+  <section class="marketplace-content">
+    <div class="container">
+      <div class="filters">
+        <div class="filter-group">
+          <label>Platform:</label>
+          <select id="platformFilter">
+            <option value="">All Platforms</option>
+            <option value="Instagram">Instagram</option>
+            <option value="YouTube">YouTube</option>
+            <option value="TikTok">TikTok</option>
+            <option value="Twitter">Twitter</option>
+            <option value="Facebook">Facebook</option>
+          </select>
+        </div>
+        
+        <div class="filter-group">
+          <label>Price Range:</label>
+          <input type="number" id="minPrice" placeholder="Min $">
+          <input type="number" id="maxPrice" placeholder="Max $">
+        </div>
+
+        <button id="applyFilters" class="btn btn-secondary">Apply Filters</button>
+        <button id="viewResales" class="btn btn-secondary">View Resale Market</button>
+      </div>
+
+      <div id="marketplaceGrid" class="marketplace-grid">
+        <div class="loading">Loading marketplace...</div>
+      </div>
+
+      <div id="pagination" class="pagination"></div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2024 AEGIS Rights Broker. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Purchase Modal -->
+  <div id="purchaseModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Purchase Rights License</h2>
+      <div id="modalDetails"></div>
+      <div class="modal-actions">
+        <input type="text" id="buyerIdInput" placeholder="Enter your User ID">
+        <button id="confirmPurchase" class="btn btn-primary">Confirm Purchase</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/marketplace.js"></script>
+</body>
+</html>

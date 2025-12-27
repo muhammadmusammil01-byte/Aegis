@@ -1,0 +1,8 @@
+node_modules/
+.env
+vault/
+*.log
+.DS_Store
+dist/
+build/
+coverage/

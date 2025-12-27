@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Audit Log - AEGIS</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <div class="nav-brand">
+        <a href="/">
+          <h1>🛡️ AEGIS</h1>
+          <span class="tagline">Admin Command Center</span>
+        </a>
+      </div>
+      <div class="nav-links" id="navLinks">
+        <a href="/admin-dashboard.html">Dashboard</a>
+        <a href="/admin-users.html">Users</a>
+        <a href="/admin-content.html">Content</a>
+        <a href="/admin-audit.html" class="active">Audit Log</a>
+        <a href="#" id="logoutLink">Logout</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="page-header">
+    <div class="container">
+      <h1>Security Audit Log</h1>
+      <p>Forensic tracking of all platform actions</p>
+    </div>
+  </section>
+
+  <section class="audit-content">
+    <div class="container">
+      
+      <div class="audit-info">
+        <p><strong>Note:</strong> This is a placeholder for the audit log feature. Implementation would track all user actions, API calls, and system events for security and compliance.</p>
+      </div>
+
+      <div class="table-container">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Timestamp</th>
+              <th>User</th>
+              <th>Action</th>
+              <th>Resource</th>
+              <th>IP Address</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="6" class="loading">Audit log feature coming soon...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2024 AEGIS Rights Broker. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="/js/auth.js"></script>
+</body>
+</html>
