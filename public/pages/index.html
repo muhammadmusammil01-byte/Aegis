@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexusHub - AI-Powered Project Incubation & Escrow Marketplace</title>
+    <link rel="stylesheet" href="/css/nexus/glassmorphic.css">
+    
+    <style>
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #fff 0%, #e2e8f0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero p {
+            font-size: 1.5rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin-bottom: 2rem;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+        }
+        
+        .feature-card {
+            text-align: center;
+        }
+        
+        .feature-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <h1 class="fade-in">🎯 NexusHub</h1>
+        <p class="fade-in">
+            AI-Powered Project Incubation & Escrow Marketplace<br>
+            Where Students Meet Verified Centers for Innovation
+        </p>
+        
+        <div style="display: flex; gap: 1rem; margin-top: 2rem;" class="fade-in">
+            <a href="/marketplace" class="btn btn-primary" style="font-size: 1.125rem; padding: 1rem 2rem;">
+                🛒 Explore Marketplace
+            </a>
+            <a href="/login" class="btn btn-glass" style="font-size: 1.125rem; padding: 1rem 2rem;">
+                🔑 Login / Register
+            </a>
+        </div>
+    </div>
+
+    <div class="features-grid">
+        <div class="glass-card feature-card fade-in">
+            <div class="feature-icon">🛡️</div>
+            <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem;">Content Shield</h3>
+            <p style="opacity: 0.9;">
+                Advanced anti-theft protection with watermarking, copy prevention, and security monitoring
+            </p>
+        </div>
+        
+        <div class="glass-card feature-card fade-in">
+            <div class="feature-icon">💰</div>
+            <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem;">Escrow System</h3>
+            <p style="opacity: 0.9;">
+                Secure payment held until project completion with Smart QR Certificate verification
+            </p>
+        </div>
+        
+        <div class="glass-card feature-card fade-in">
+            <div class="feature-icon">🧪</div>
+            <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem;">Virtual Lab</h3>
+            <p style="opacity: 0.9;">
+                Real-time code collaboration with mentor-to-student screen mirroring via WebSockets
+            </p>
+        </div>
+        
+        <div class="glass-card feature-card fade-in">
+            <div class="feature-icon">🤖</div>
+            <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem;">AI Debugger</h3>
+            <p style="opacity: 0.9;">
+                Powered by Gemini API to detect errors and provide intelligent debugging suggestions
+            </p>
+        </div>
+    </div>
+
+    <div style="text-align: center; padding: 4rem 2rem;">
+        <div class="glass" style="display: inline-block; padding: 2rem 4rem;">
+            <h2 style="font-size: 2rem; font-weight: 700; margin-bottom: 1rem;">
+                4-Role Ecosystem
+            </h2>
+            <div style="display: flex; gap: 2rem; margin-top: 2rem; flex-wrap: wrap; justify-content: center;">
+                <div class="badge badge-primary" style="font-size: 1rem; padding: 0.75rem 1.5rem;">
+                    👑 System Admin
+                </div>
+                <div class="badge badge-info" style="font-size: 1rem; padding: 0.75rem 1.5rem;">
+                    🏢 Center Admin
+                </div>
+                <div class="badge badge-success" style="font-size: 1rem; padding: 0.75rem 1.5rem;">
+                    👨‍🏫 Mentor
+                </div>
+                <div class="badge badge-warning" style="font-size: 1rem; padding: 0.75rem 1.5rem;">
+                    🎓 Student
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

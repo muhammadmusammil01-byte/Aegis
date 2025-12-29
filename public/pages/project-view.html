@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Details - NexusHub</title>
+    
+    <!-- Glassmorphic CSS -->
+    <link rel="stylesheet" href="/css/nexus/glassmorphic.css">
+    
+    <style>
+        /* Additional styles for project view */
+        .project-hero {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.3) 0%, rgba(118, 75, 162, 0.3) 100%);
+            backdrop-filter: blur(20px);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-xl);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .project-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: var(--radius-lg);
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-sm);
+            margin: var(--spacing-md) 0;
+        }
+        
+        .tech-tag {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: var(--radius-sm);
+            font-size: 0.875rem;
+            font-weight: 600;
+            backdrop-filter: blur(8px);
+        }
+        
+        .price-tag {
+            font-size: 3rem;
+            font-weight: 800;
+            color: white;
+            margin: var(--spacing-md) 0;
+        }
+        
+        .protection-notice {
+            background: rgba(239, 68, 68, 0.2);
+            border: 2px solid rgba(239, 68, 68, 0.4);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-md);
+            margin: var(--spacing-lg) 0;
+            backdrop-filter: blur(8px);
+        }
+        
+        .protection-notice h3 {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        .watermark-info {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-md);
+            font-family: var(--font-mono);
+            font-size: 0.875rem;
+            margin-top: var(--spacing-sm);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <div class="glass" style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 1000; padding: 1rem 2rem; display: flex; align-items: center; gap: 2rem;">
+        <a href="/" style="color: white; text-decoration: none; font-weight: 700; font-size: 1.25rem;">
+            🎯 NexusHub
+        </a>
+        <nav style="display: flex; gap: 1.5rem;">
+            <a href="/marketplace" style="color: rgba(255, 255, 255, 0.9); text-decoration: none;">Marketplace</a>
+            <a href="/dashboard" style="color: rgba(255, 255, 255, 0.9); text-decoration: none;">Dashboard</a>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div style="max-width: 1200px; margin: 0 auto; padding: 6rem 2rem 2rem;">
+        
+        <!-- Protection Notice -->
+        <div class="protection-notice fade-in">
+            <h3>
+                <span style="font-size: 1.5rem;">🛡️</span>
+                Content Protected by NexusHub Shield
+            </h3>
+            <p>
+                This content is protected with advanced anti-theft technology. 
+                Right-click, copy-paste, and screenshots are disabled or watermarked with your credentials.
+            </p>
+            <div class="watermark-info">
+                <div>📧 Email Watermark: <span id="user-email">Loading...</span></div>
+                <div>🌐 IP Watermark: <span id="user-ip">Loading...</span></div>
+                <div>⏰ Timestamp: <span id="timestamp">Loading...</span></div>
+            </div>
+        </div>
+
+        <!-- Project Hero -->
+        <div class="project-hero protected-content fade-in">
+            <div style="display: flex; justify-content: space-between; align-items: start; gap: 2rem; flex-wrap: wrap;">
+                <div style="flex: 1; min-width: 300px;">
+                    <div class="badge badge-primary" id="project-category">Loading...</div>
+                    <h1 style="font-size: 3rem; font-weight: 800; margin: 1rem 0;" id="project-title">
+                        Loading Project...
+                    </h1>
+                    <p style="font-size: 1.25rem; opacity: 0.9; line-height: 1.8;" id="project-description">
+                        Loading description...
+                    </p>
+                </div>
+                <div style="text-align: right;">
+                    <div style="opacity: 0.8; font-size: 1rem;">Starting from</div>
+                    <div class="price-tag" id="project-price">$0</div>
+                    <button class="btn btn-primary btn-lg" onclick="purchaseProject()" style="font-size: 1.125rem; padding: 1rem 2rem;">
+                        💰 Purchase Now
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Project Image -->
+        <div class="glass protected-content fade-in" style="padding: 0; overflow: hidden; margin-bottom: 2rem;">
+            <img id="project-image" src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1200&h=400&fit=crop" 
+                 alt="Project" class="project-image" draggable="false">
+        </div>
+
+        <!-- Project Details Grid -->
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+            
+            <!-- Left Column - Details -->
+            <div>
+                <!-- Description -->
+                <div class="glass-card protected-content fade-in" style="margin-bottom: 2rem;">
+                    <h2 style="font-size: 1.75rem; font-weight: 700; margin-bottom: 1rem;">
+                        📋 Detailed Description
+                    </h2>
+                    <div id="detailed-description" style="line-height: 1.8;">
+                        Loading detailed description...
+                    </div>
+                </div>
+
+                <!-- Tech Stack -->
+                <div class="glass-card protected-content fade-in" style="margin-bottom: 2rem;">
+                    <h2 style="font-size: 1.75rem; font-weight: 700; margin-bottom: 1rem;">
+                        🛠️ Technology Stack
+                    </h2>
+                    <div class="tech-stack" id="tech-stack">
+                        <!-- Technologies will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Features -->
+                <div class="glass-card protected-content fade-in">
+                    <h2 style="font-size: 1.75rem; font-weight: 700; margin-bottom: 1rem;">
+                        ✨ What You'll Learn
+                    </h2>
+                    <ul id="features-list" style="list-style: none; padding: 0;">
+                        <!-- Features will be loaded here -->
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Right Column - Info -->
+            <div>
+                <!-- Center Info -->
+                <div class="glass-card fade-in" style="margin-bottom: 2rem;">
+                    <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem;">
+                        🏢 Center Information
+                    </h3>
+                    <div style="line-height: 2;">
+                        <div><strong>Center:</strong> <span id="center-name">Loading...</span></div>
+                        <div><strong>Status:</strong> <span class="badge badge-success">Verified</span></div>
+                        <div><strong>Projects:</strong> <span id="center-projects">0</span></div>
+                    </div>
+                </div>
+
+                <!-- Project Stats -->
+                <div class="glass-card fade-in" style="margin-bottom: 2rem;">
+                    <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem;">
+                        📊 Project Stats
+                    </h3>
+                    <div style="line-height: 2;">
+                        <div><strong>Difficulty:</strong> <span id="difficulty">Loading...</span></div>
+                        <div><strong>Duration:</strong> <span id="duration">Loading...</span></div>
+                        <div><strong>Views:</strong> <span id="views">0</span></div>
+                        <div><strong>Purchases:</strong> <span id="purchases">0</span></div>
+                    </div>
+                </div>
+
+                <!-- Mentor Support -->
+                <div class="glass-card fade-in">
+                    <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem;">
+                        👨‍🏫 Mentor Support
+                    </h3>
+                    <p style="opacity: 0.9; line-height: 1.8;">
+                        Get dedicated mentorship through our Virtual Lab with real-time code collaboration 
+                        and AI-powered debugging assistance.
+                    </p>
+                    <button class="btn btn-glass" style="width: 100%; margin-top: 1rem;">
+                        Learn More
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Security Footer -->
+        <div class="glass-card text-center" style="opacity: 0.8;">
+            <p>
+                🔒 This content is protected by NexusHub Content Shield™<br>
+                All actions are logged and watermarked for security purposes
+            </p>
+        </div>
+    </div>
+
+    <!-- Content Shield Script (MUST be loaded) -->
+    <script src="/js/nexus/contentShield.js"></script>
+
+    <!-- Project View Script -->
+    <script>
+        // Get project ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const projectId = window.location.pathname.split('/').pop();
+
+        // Load project details
+        async function loadProject() {
+            try {
+                const token = localStorage.getItem('nexushub_token');
+                const headers = {};
+                
+                if (token) {
+                    headers['Authorization'] = `Bearer ${token}`;
+                }
+
+                const response = await fetch(`/api/marketplace/${projectId}`, { headers });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to load project');
+                }
+
+                const data = await response.json();
+                const project = data.project;
+
+                // Update page with project data
+                document.getElementById('project-title').textContent = project.title;
+                document.getElementById('project-description').textContent = project.description;
+                document.getElementById('project-category').textContent = project.category || 'General';
+                document.getElementById('project-price').textContent = `$${project.price}`;
+                document.getElementById('detailed-description').textContent = 
+                    project.detailed_description || project.description;
+                
+                // Center info
+                document.getElementById('center-name').textContent = project.center_name;
+                
+                // Stats
+                document.getElementById('difficulty').textContent = project.difficulty_level || 'Intermediate';
+                document.getElementById('duration').textContent = 
+                    `${project.estimated_duration_days || 30} days`;
+                document.getElementById('views').textContent = project.views_count || 0;
+                document.getElementById('purchases').textContent = project.purchases_count || 0;
+
+                // Tech stack
+                if (project.technologies && project.technologies.length > 0) {
+                    const techStack = document.getElementById('tech-stack');
+                    techStack.innerHTML = '';
+                    project.technologies.forEach(tech => {
+                        const tag = document.createElement('div');
+                        tag.className = 'tech-tag';
+                        tag.textContent = tech;
+                        techStack.appendChild(tag);
+                    });
+                }
+
+                // Update watermark info if user is authenticated
+                if (project.watermark) {
+                    document.getElementById('user-email').textContent = project.watermark.email;
+                    document.getElementById('user-ip').textContent = project.watermark.ip;
+                    document.getElementById('timestamp').textContent = 
+                        new Date(project.watermark.timestamp).toLocaleString();
+                }
+
+                // Update image if available
+                if (project.thumbnail_url) {
+                    document.getElementById('project-image').src = project.thumbnail_url;
+                }
+
+            } catch (error) {
+                console.error('Error loading project:', error);
+                document.getElementById('project-title').textContent = 'Error loading project';
+                document.getElementById('project-description').textContent = 
+                    'Unable to load project details. Please try again later.';
+            }
+        }
+
+        function purchaseProject() {
+            const token = localStorage.getItem('nexushub_token');
+            
+            if (!token) {
+                alert('Please login to purchase this project');
+                window.location.href = '/login';
+                return;
+            }
+
+            // Redirect to purchase flow
+            window.location.href = `/student/purchase?project=${projectId}`;
+        }
+
+        // Load project on page load
+        loadProject();
+
+        // Update watermark timestamp periodically
+        setInterval(() => {
+            document.getElementById('timestamp').textContent = new Date().toLocaleString();
+        }, 1000);
+    </script>
+</body>
+</html>

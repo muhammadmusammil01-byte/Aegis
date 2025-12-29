@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketplace - NexusHub</title>
+    <link rel="stylesheet" href="/css/nexus/glassmorphic.css">
+    
+    <style>
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1.5rem 2rem;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+        }
+        
+        .project-card {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .project-card:hover {
+            transform: translateY(-8px);
+        }
+        
+        .project-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: var(--radius-md);
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div style="max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
+            <a href="/" style="color: white; text-decoration: none; font-weight: 700; font-size: 1.5rem;">
+                🎯 NexusHub
+            </a>
+            <nav style="display: flex; gap: 2rem; align-items: center;">
+                <a href="/marketplace" style="color: white; text-decoration: none;">Marketplace</a>
+                <a href="/dashboard" style="color: rgba(255, 255, 255, 0.8); text-decoration: none;">Dashboard</a>
+                <a href="/login" class="btn btn-primary" style="padding: 0.5rem 1.5rem;">Login</a>
+            </nav>
+        </div>
+    </div>
+
+    <div style="max-width: 1400px; margin: 0 auto; padding: 6rem 2rem 2rem;">
+        <div style="text-align: center; margin-bottom: 3rem;" class="fade-in">
+            <h1 style="font-size: 3rem; font-weight: 800; margin-bottom: 1rem;">
+                🛒 Project Marketplace
+            </h1>
+            <p style="font-size: 1.25rem; opacity: 0.9;">
+                Discover innovative projects and start learning with expert mentors
+            </p>
+        </div>
+
+        <!-- Filters -->
+        <div class="glass" style="padding: 1.5rem; margin-bottom: 2rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+            <input type="text" id="search" placeholder="🔍 Search projects..." class="input-glass" 
+                   style="flex: 1; min-width: 300px;">
+            <select id="category" class="input-glass" style="min-width: 200px;">
+                <option value="">All Categories</option>
+                <option value="Web Development">Web Development</option>
+                <option value="Mobile Apps">Mobile Apps</option>
+                <option value="AI/ML">AI/ML</option>
+                <option value="Data Science">Data Science</option>
+            </select>
+            <button class="btn btn-primary" onclick="loadProjects()">
+                Apply Filters
+            </button>
+        </div>
+
+        <!-- Projects Grid -->
+        <div id="projects-container" class="projects-grid">
+            <!-- Projects will be loaded here -->
+        </div>
+        
+        <div id="loading" style="text-align: center; padding: 4rem;">
+            <div style="font-size: 2rem;">⏳</div>
+            <p style="margin-top: 1rem; opacity: 0.8;">Loading projects...</p>
+        </div>
+        
+        <div id="no-projects" style="text-align: center; padding: 4rem; display: none;">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">📦</div>
+            <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem;">No projects found</h3>
+            <p style="opacity: 0.8;">Try adjusting your filters or check back later</p>
+        </div>
+    </div>
+
+    <script>
+        async function loadProjects() {
+            const container = document.getElementById('projects-container');
+            const loading = document.getElementById('loading');
+            const noProjects = document.getElementById('no-projects');
+            
+            loading.style.display = 'block';
+            noProjects.style.display = 'none';
+            container.innerHTML = '';
+            
+            try {
+                const search = document.getElementById('search').value;
+                const category = document.getElementById('category').value;
+                
+                const params = new URLSearchParams();
+                if (search) params.append('search', search);
+                if (category) params.append('category', category);
+                
+                const response = await fetch(`/api/marketplace?${params}`);
+                const data = await response.json();
+                
+                loading.style.display = 'none';
+                
+                if (data.projects.length === 0) {
+                    noProjects.style.display = 'block';
+                    return;
+                }
+                
+                data.projects.forEach(project => {
+                    const card = createProjectCard(project);
+                    container.appendChild(card);
+                });
+                
+            } catch (error) {
+                console.error('Error loading projects:', error);
+                loading.style.display = 'none';
+                noProjects.style.display = 'block';
+            }
+        }
+        
+        function createProjectCard(project) {
+            const card = document.createElement('div');
+            card.className = 'glass-card project-card fade-in';
+            card.onclick = () => window.location.href = `/project/${project.id}`;
+            
+            const imageUrl = project.thumbnail_url || 
+                `https://images.unsplash.com/photo-${Math.floor(Math.random() * 1000000)}?w=400&h=200&fit=crop`;
+            
+            card.innerHTML = `
+                <img src="${imageUrl}" alt="${project.title}" class="project-image" draggable="false">
+                <div class="badge badge-primary" style="margin-bottom: 0.5rem;">${project.category || 'General'}</div>
+                <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem;">${project.title}</h3>
+                <p style="opacity: 0.9; margin-bottom: 1rem; line-height: 1.6;">
+                    ${project.description.substring(0, 100)}${project.description.length > 100 ? '...' : ''}
+                </p>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
+                    <div>
+                        <div style="font-size: 0.875rem; opacity: 0.8;">By ${project.center_name}</div>
+                    </div>
+                    <div style="font-size: 1.5rem; font-weight: 800; color: var(--primary-light);">
+                        $${project.price}
+                    </div>
+                </div>
+                <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255, 255, 255, 0.2); 
+                            display: flex; justify-content: space-between; font-size: 0.875rem; opacity: 0.8;">
+                    <span>👁️ ${project.views_count || 0} views</span>
+                    <span>📦 ${project.purchases_count || 0} purchases</span>
+                </div>
+            `;
+            
+            return card;
+        }
+        
+        // Load projects on page load
+        loadProjects();
+        
+        // Search on Enter key
+        document.getElementById('search').addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') {
+                loadProjects();
+            }
+        });
+    </script>
+</body>
+</html>

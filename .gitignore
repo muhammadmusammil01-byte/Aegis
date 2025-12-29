@@ -6,3 +6,10 @@ vault/
 dist/
 build/
 coverage/
+uploads/
+certificates/
+logs/
+.vscode/
+.idea/
+*.swp
+*.swo
