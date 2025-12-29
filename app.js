@@ -16,6 +16,7 @@ const jwtConfig = require('./config/jwt');
 
 // Middleware imports
 const { authenticateJWT, authorizeRoles } = require('./middleware/rbac');
+const { apiLimiter, authLimiter } = require('./middleware/rateLimiter');
 
 // Route imports
 const authRoutes = require('./routes/nexus/auth');
@@ -46,6 +47,9 @@ const io = socketIo(server, {
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+
+// Apply general rate limiting to all API routes
+app.use('/api/', apiLimiter);
 
 // Static files - serve from public directory
 app.use(express.static(path.join(__dirname, 'public')));
@@ -92,7 +96,7 @@ io.on('connection', (socket) => {
 // ============================================
 
 // Public routes (no authentication required)
-app.use('/api/auth', authRoutes);
+app.use('/api/auth', authLimiter, authRoutes);
 app.use('/api/marketplace', marketplaceRoutes);
 
 // Protected routes (authentication required, role-based)

@@ -44,9 +44,9 @@ router.get('/', optionalAuth, async (req, res) => {
     }
     
     if (search) {
-      query += ` AND (p.title ILIKE $${paramCount} OR p.description ILIKE $${paramCount})`;
-      params.push(`%${search}%`);
-      paramCount++;
+      query += ` AND (p.title ILIKE $${paramCount} OR p.description ILIKE $${paramCount + 1})`;
+      params.push(`%${search}%`, `%${search}%`);
+      paramCount += 2;
     }
     
     query += ' ORDER BY p.created_at DESC';

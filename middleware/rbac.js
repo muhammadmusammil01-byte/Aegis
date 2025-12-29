@@ -199,25 +199,29 @@ const isStudent = (req, res, next) => {
 
 /**
  * Audit log middleware - logs all authenticated actions
+ * Note: For production, consider using async queuing/batching for performance
  */
 const auditLog = async (req, res, next) => {
   if (req.user) {
-    try {
-      await db.query(
-        `INSERT INTO audit_logs (user_id, action, entity_type, ip_address, user_agent)
-         VALUES ($1, $2, $3, $4, $5)`,
-        [
-          req.user.userId,
-          `${req.method} ${req.path}`,
-          req.baseUrl.split('/').pop(),
-          req.ip,
-          req.get('user-agent')
-        ]
-      );
-    } catch (error) {
-      console.error('Audit log error:', error);
-      // Don't fail the request if audit logging fails
-    }
+    // Use setImmediate to avoid blocking the request
+    setImmediate(async () => {
+      try {
+        await db.query(
+          `INSERT INTO audit_logs (user_id, action, entity_type, ip_address, user_agent)
+           VALUES ($1, $2, $3, $4, $5)`,
+          [
+            req.user.userId,
+            `${req.method} ${req.path}`,
+            req.baseUrl.split('/').pop(),
+            req.ip,
+            req.get('user-agent')
+          ]
+        );
+      } catch (error) {
+        console.error('Audit log error:', error);
+        // Don't fail the request if audit logging fails
+      }
+    });
   }
   next();
 };

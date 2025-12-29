@@ -93,16 +93,9 @@
         }
       }
       
-      // Get IP from API
-      try {
-        const ipResponse = await fetch('https://api.ipify.org?format=json');
-        if (ipResponse.ok) {
-          const ipData = await ipResponse.json();
-          userInfo.ip = ipData.ip;
-        }
-      } catch (e) {
-        console.warn('Could not fetch IP');
-      }
+      // Get IP from backend (more secure than external API)
+      // The watermark will be updated by the backend when fetching project details
+      userInfo.ip = 'Fetching from server...';
       
       // Update watermark with user info
       updateWatermark();
@@ -375,6 +368,7 @@
     // Send to backend (optional)
     const token = localStorage.getItem('nexushub_token');
     if (token) {
+      // Silently log security events without blocking or showing errors
       fetch('/api/security/log', {
         method: 'POST',
         headers: {
@@ -389,6 +383,7 @@
         })
       }).catch(() => {
         // Silent fail - don't disrupt user experience
+        // In production, implement this endpoint in routes
       });
     }
   }
