@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - NexusHub</title>
+    <link rel="stylesheet" href="/css/nexus/glassmorphic.css">
+    
+    <style>
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        
+        .login-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: var(--radius-xl);
+            padding: 3rem;
+            max-width: 450px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            color: var(--dark);
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark-700);
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 2px solid var(--light-300);
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+        
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            margin-bottom: 1rem;
+            display: none;
+        }
+        
+        .success-message {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            margin-bottom: 1rem;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card fade-in">
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <h1 style="font-size: 2.5rem; font-weight: 800; color: var(--primary); margin-bottom: 0.5rem;">
+                    🎯 NexusHub
+                </h1>
+                <p style="color: var(--dark-600);">Sign in to your account</p>
+            </div>
+            
+            <div id="error-message" class="error-message"></div>
+            <div id="success-message" class="success-message"></div>
+            
+            <form id="login-form">
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" id="email" required 
+                           placeholder="your@email.com">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-input" id="password" required 
+                           placeholder="••••••••">
+                </div>
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%; font-size: 1.125rem; padding: 1rem;">
+                    🔑 Sign In
+                </button>
+            </form>
+            
+            <div style="text-align: center; margin-top: 2rem;">
+                <p style="color: var(--dark-600);">
+                    Don't have an account? 
+                    <a href="#" onclick="showRegister()" style="color: var(--primary); font-weight: 600;">Register</a>
+                </p>
+                <a href="/" style="color: var(--dark-600); text-decoration: none; margin-top: 1rem; display: inline-block;">
+                    ← Back to Home
+                </a>
+            </div>
+        </div>
+        
+        <!-- Register Card (hidden by default) -->
+        <div class="login-card fade-in" id="register-card" style="display: none;">
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <h1 style="font-size: 2.5rem; font-weight: 800; color: var(--primary); margin-bottom: 0.5rem;">
+                    📝 Register
+                </h1>
+                <p style="color: var(--dark-600);">Create your NexusHub account</p>
+            </div>
+            
+            <div id="register-error" class="error-message"></div>
+            <div id="register-success" class="success-message"></div>
+            
+            <form id="register-form">
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" class="form-input" id="reg-fullname" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Username</label>
+                    <input type="text" class="form-input" id="reg-username" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" id="reg-email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-input" id="reg-password" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Role</label>
+                    <select class="form-input" id="reg-role" required>
+                        <option value="">Select your role</option>
+                        <option value="STUDENT">🎓 Student</option>
+                        <option value="CENTER_ADMIN">🏢 Center Admin</option>
+                        <option value="MENTOR">👨‍🏫 Mentor</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%; font-size: 1.125rem; padding: 1rem;">
+                    ✨ Create Account
+                </button>
+            </form>
+            
+            <div style="text-align: center; margin-top: 2rem;">
+                <p style="color: var(--dark-600);">
+                    Already have an account? 
+                    <a href="#" onclick="showLogin()" style="color: var(--primary); font-weight: 600;">Sign In</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const loginCard = document.querySelector('.login-card:first-of-type');
+        const registerCard = document.getElementById('register-card');
+        
+        function showRegister() {
+            loginCard.style.display = 'none';
+            registerCard.style.display = 'block';
+        }
+        
+        function showLogin() {
+            registerCard.style.display = 'none';
+            loginCard.style.display = 'block';
+        }
+        
+        // Login form handler
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('error-message');
+            const successDiv = document.getElementById('success-message');
+            
+            errorDiv.style.display = 'none';
+            successDiv.style.display = 'none';
+            
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.error || 'Login failed');
+                }
+                
+                // Store token
+                localStorage.setItem('nexushub_token', data.token);
+                localStorage.setItem('nexushub_user', JSON.stringify(data.user));
+                
+                // Show success and redirect
+                successDiv.textContent = 'Login successful! Redirecting...';
+                successDiv.style.display = 'block';
+                
+                setTimeout(() => {
+                    window.location.href = '/dashboard';
+                }, 1000);
+                
+            } catch (error) {
+                errorDiv.textContent = error.message;
+                errorDiv.style.display = 'block';
+            }
+        });
+        
+        // Register form handler
+        document.getElementById('register-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const fullName = document.getElementById('reg-fullname').value;
+            const username = document.getElementById('reg-username').value;
+            const email = document.getElementById('reg-email').value;
+            const password = document.getElementById('reg-password').value;
+            const role = document.getElementById('reg-role').value;
+            const errorDiv = document.getElementById('register-error');
+            const successDiv = document.getElementById('register-success');
+            
+            errorDiv.style.display = 'none';
+            successDiv.style.display = 'none';
+            
+            try {
+                const response = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, username, password, role, fullName })
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.error || 'Registration failed');
+                }
+                
+                // Store token
+                localStorage.setItem('nexushub_token', data.token);
+                localStorage.setItem('nexushub_user', JSON.stringify(data.user));
+                
+                // Show success and redirect
+                successDiv.textContent = 'Account created successfully! Redirecting...';
+                successDiv.style.display = 'block';
+                
+                setTimeout(() => {
+                    window.location.href = '/dashboard';
+                }, 1000);
+                
+            } catch (error) {
+                errorDiv.textContent = error.message;
+                errorDiv.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
