@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - NexusHub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+
+        .sidebar {
+            width: 250px;
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 2rem;
+        }
+
+        .code-mirror {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            white-space: pre;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar glass p-6">
+        <div class="mb-8">
+            <h1 class="text-2xl font-bold text-white">NexusHub</h1>
+            <p class="text-sm text-white/70">Student Portal</p>
+        </div>
+
+        <nav class="space-y-2">
+            <a href="#groups" onclick="showSection('groups')" class="block px-4 py-2 text-white rounded-lg hover:bg-white/10 transition">
+                👥 My Groups
+            </a>
+            <a href="#marketplace" onclick="showSection('marketplace')" class="block px-4 py-2 text-white rounded-lg hover:bg-white/10 transition">
+                🛒 Browse Projects
+            </a>
+            <a href="#virtual-lab" onclick="showSection('virtual-lab')" class="block px-4 py-2 text-white rounded-lg hover:bg-white/10 transition">
+                💻 Virtual Lab
+            </a>
+            <a href="#certificates" onclick="showSection('certificates')" class="block px-4 py-2 text-white rounded-lg hover:bg-white/10 transition">
+                📜 Certificates
+            </a>
+        </nav>
+
+        <div class="mt-8 pt-8 border-t border-white/20">
+            <button onclick="logout()" class="w-full px-4 py-2 bg-red-500/20 text-white rounded-lg hover:bg-red-500/30 transition">
+                Logout
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Groups Section -->
+        <div id="groups" class="section">
+            <h2 class="text-3xl font-bold text-white mb-6">My Groups</h2>
+            
+            <div class="glass rounded-xl p-6 mb-6">
+                <h3 class="text-xl font-bold text-white mb-4">Create New Group</h3>
+                <form id="createGroupForm" class="space-y-4">
+                    <input type="text" id="groupName" required placeholder="Group Name"
+                        class="w-full px-4 py-2 rounded-lg bg-white/10 text-white border border-white/20 placeholder-white/50">
+                    <button type="submit" class="px-6 py-2 bg-white text-purple-600 rounded-lg font-semibold hover:bg-gray-100 transition">
+                        Create Group
+                    </button>
+                </form>
+            </div>
+
+            <div id="myGroups" class="space-y-4">
+                <p class="text-white/70">Loading your groups...</p>
+            </div>
+        </div>
+
+        <!-- Marketplace Section -->
+        <div id="marketplace" class="section hidden">
+            <h2 class="text-3xl font-bold text-white mb-6">Browse Projects</h2>
+            <a href="/nexushub-marketplace.html" class="inline-block px-6 py-3 bg-white text-purple-600 rounded-lg font-semibold hover:bg-gray-100 transition">
+                Go to Marketplace →
+            </a>
+        </div>
+
+        <!-- Virtual Lab Section -->
+        <div id="virtual-lab" class="section hidden">
+            <h2 class="text-3xl font-bold text-white mb-6">Virtual Lab - Shadow Coding</h2>
+            
+            <div class="grid md:grid-cols-2 gap-6 mb-6">
+                <div class="glass rounded-xl p-4">
+                    <label class="block text-white mb-2">Select Group</label>
+                    <select id="virtualLabGroup" class="w-full px-4 py-2 rounded-lg bg-white/10 text-white border border-white/20">
+                        <option value="">Select a group</option>
+                    </select>
+                </div>
+                <div class="glass rounded-xl p-4">
+                    <label class="block text-white mb-2">Session ID</label>
+                    <input type="text" id="sessionId" placeholder="Enter session ID"
+                        class="w-full px-4 py-2 rounded-lg bg-white/10 text-white border border-white/20 placeholder-white/50">
+                </div>
+            </div>
+
+            <button id="joinSessionBtn" onclick="joinVirtualLab()" class="mb-6 px-6 py-3 bg-green-500 text-white rounded-lg font-semibold hover:bg-green-600 transition">
+                Join Virtual Lab Session
+            </button>
+
+            <div id="virtualLabContent" class="hidden">
+                <div class="glass rounded-xl p-6 mb-4">
+                    <h3 class="text-xl font-bold text-white mb-4">Mentor's Code (Real-Time Mirror)</h3>
+                    <div id="mentorCodeMirror" class="code-mirror">
+// Waiting for mentor to share code...
+                    </div>
+                </div>
+
+                <div class="glass rounded-xl p-6 mb-4">
+                    <h3 class="text-xl font-bold text-white mb-4">Your Code</h3>
+                    <textarea id="studentCode" rows="10" 
+                        class="w-full px-4 py-3 rounded-lg bg-white/10 text-white border border-white/20 font-mono"
+                        placeholder="Write your code here..."></textarea>
+                    <button onclick="submitForAIDebug()" class="mt-4 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">
+                        🤖 Submit for AI Debugging
+                    </button>
+                </div>
+
+                <div id="aiDebugResult" class="hidden glass rounded-xl p-6">
+                    <h3 class="text-xl font-bold text-white mb-4">AI Debug Results</h3>
+                    <div id="aiDebugContent" class="text-white/80"></div>
+                </div>
+
+                <div class="glass rounded-xl p-6">
+                    <h3 class="text-xl font-bold text-white mb-4">Session Chat</h3>
+                    <div id="chatMessages" class="h-40 overflow-y-auto mb-4 space-y-2"></div>
+                    <div class="flex gap-2">
+                        <input type="text" id="chatInput" placeholder="Type a message..."
+                            class="flex-1 px-4 py-2 rounded-lg bg-white/10 text-white border border-white/20 placeholder-white/50">
+                        <button onclick="sendChatMessage()" class="px-6 py-2 bg-white text-purple-600 rounded-lg font-semibold hover:bg-gray-100 transition">
+                            Send
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Certificates Section -->
+        <div id="certificates" class="section hidden">
+            <h2 class="text-3xl font-bold text-white mb-6">My Certificates</h2>
+            <div id="certificatesList" class="space-y-4">
+                <p class="text-white/70">Loading certificates...</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const token = localStorage.getItem('token');
+        if (!token) {
+            window.location.href = '/login.html';
+        }
+
+        let socket = null;
+        let currentSessionId = null;
+
+        // Section navigation
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            document.getElementById(sectionId).classList.remove('hidden');
+
+            if (sectionId === 'groups') loadMyGroups();
+            if (sectionId === 'virtual-lab') loadGroupsForVirtualLab();
+            if (sectionId === 'certificates') loadCertificates();
+        }
+
+        // Load my groups
+        async function loadMyGroups() {
+            try {
+                const response = await fetch('/api/student/my-groups', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                const { groups } = await response.json();
+                const container = document.getElementById('myGroups');
+                
+                if (!groups || groups.length === 0) {
+                    container.innerHTML = '<p class="text-white/70">No groups yet. Create one to get started!</p>';
+                    return;
+                }
+
+                container.innerHTML = groups.map(group => `
+                    <div class="glass rounded-xl p-6">
+                        <h3 class="text-xl font-bold text-white mb-2">${group.group_name}</h3>
+                        <p class="text-white/70 mb-2">${group.project_title || 'No project selected'}</p>
+                        <p class="text-white/60 text-sm mb-4">
+                            Status: ${group.status} • Members: ${group.member_count}/3
+                        </p>
+                        ${group.member_names ? `<p class="text-white/60 text-sm">Team: ${group.member_names.join(', ')}</p>` : ''}
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading groups:', error);
+            }
+        }
+
+        // Create group
+        document.getElementById('createGroupForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const groupName = document.getElementById('groupName').value;
+            
+            try {
+                const response = await fetch('/api/student/groups', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ 
+                        groupName,
+                        isLeader: true
+                    })
+                });
+
+                if (!response.ok) throw new Error('Failed to create group');
+
+                alert('Group created successfully!');
+                document.getElementById('groupName').value = '';
+                loadMyGroups();
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        });
+
+        // Load groups for virtual lab dropdown
+        async function loadGroupsForVirtualLab() {
+            try {
+                const response = await fetch('/api/student/my-groups', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                const { groups } = await response.json();
+                const select = document.getElementById('virtualLabGroup');
+                
+                select.innerHTML = '<option value="">Select a group</option>' +
+                    groups.map(g => `<option value="${g.group_id}">${g.group_name}</option>`).join('');
+            } catch (error) {
+                console.error('Error loading groups:', error);
+            }
+        }
+
+        // Join Virtual Lab
+        function joinVirtualLab() {
+            const groupId = document.getElementById('virtualLabGroup').value;
+            const sessionId = document.getElementById('sessionId').value;
+
+            if (!groupId || !sessionId) {
+                alert('Please select a group and enter session ID');
+                return;
+            }
+
+            currentSessionId = sessionId;
+
+            // Initialize Socket.IO connection
+            socket = io('/virtual-lab', {
+                auth: { token }
+            });
+
+            socket.on('connect', () => {
+                console.log('Connected to Virtual Lab');
+                socket.emit('join-session', { groupId: parseInt(groupId), sessionId });
+            });
+
+            socket.on('session-joined', (data) => {
+                document.getElementById('virtualLabContent').classList.remove('hidden');
+                document.getElementById('joinSessionBtn').textContent = 'Connected to Session';
+                document.getElementById('joinSessionBtn').disabled = true;
+            });
+
+            socket.on('code-mirror', (data) => {
+                document.getElementById('mentorCodeMirror').textContent = data.code;
+            });
+
+            socket.on('session-message', (data) => {
+                const chatDiv = document.getElementById('chatMessages');
+                const msgDiv = document.createElement('div');
+                msgDiv.className = 'text-white/80 text-sm';
+                msgDiv.innerHTML = `<strong>${data.name} (${data.role}):</strong> ${data.message}`;
+                chatDiv.appendChild(msgDiv);
+                chatDiv.scrollTop = chatDiv.scrollHeight;
+            });
+
+            socket.on('ai-debug-result', (data) => {
+                document.getElementById('aiDebugResult').classList.remove('hidden');
+                document.getElementById('aiDebugContent').innerHTML = `
+                    <p class="mb-2"><strong>Error Detected:</strong> ${data.errorDetected}</p>
+                    <p class="mb-2"><strong>AI Suggestion:</strong> ${data.aiSuggestion}</p>
+                    <p><strong>Type:</strong> ${data.errorType}</p>
+                `;
+            });
+
+            socket.on('error', (data) => {
+                alert(data.message);
+            });
+        }
+
+        // Submit code for AI debugging
+        function submitForAIDebug() {
+            if (!socket || !currentSessionId) {
+                alert('Please join a session first');
+                return;
+            }
+
+            const studentCode = document.getElementById('studentCode').value;
+            const groupId = document.getElementById('virtualLabGroup').value;
+
+            if (!studentCode.trim()) {
+                alert('Please write some code first');
+                return;
+            }
+
+            socket.emit('student-code-submit', {
+                sessionId: currentSessionId,
+                groupId: parseInt(groupId),
+                studentCode
+            });
+
+            alert('Code submitted for AI debugging...');
+        }
+
+        // Send chat message
+        function sendChatMessage() {
+            if (!socket || !currentSessionId) return;
+
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+
+            if (!message) return;
+
+            socket.emit('session-message', {
+                sessionId: currentSessionId,
+                message
+            });
+
+            // Add own message to chat
+            const chatDiv = document.getElementById('chatMessages');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'text-white/80 text-sm';
+            msgDiv.innerHTML = `<strong>You:</strong> ${message}`;
+            chatDiv.appendChild(msgDiv);
+            chatDiv.scrollTop = chatDiv.scrollHeight;
+
+            input.value = '';
+        }
+
+        // Load certificates
+        async function loadCertificates() {
+            try {
+                const response = await fetch('/api/student/certificates', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                const { certificates } = await response.json();
+                const container = document.getElementById('certificatesList');
+                
+                if (!certificates || certificates.length === 0) {
+                    container.innerHTML = '<p class="text-white/70">No certificates yet</p>';
+                    return;
+                }
+
+                container.innerHTML = certificates.map(cert => `
+                    <div class="glass rounded-xl p-6">
+                        <h3 class="text-xl font-bold text-white mb-2">${cert.project_title}</h3>
+                        <p class="text-white/70 mb-2">Group: ${cert.group_name}</p>
+                        <p class="text-white/60 text-sm mb-4">
+                            Code: ${cert.certificate_code} • Issued: ${new Date(cert.issue_date).toLocaleDateString()}
+                        </p>
+                        ${cert.certificate_url ? `
+                            <a href="${cert.certificate_url}" target="_blank" class="inline-block px-4 py-2 bg-white text-purple-600 rounded-lg font-semibold hover:bg-gray-100 transition">
+                                Download Certificate
+                            </a>
+                        ` : ''}
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading certificates:', error);
+            }
+        }
+
+        // Logout
+        function logout() {
+            if (socket) socket.disconnect();
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = '/login.html';
+        }
+
+        // Initialize
+        loadMyGroups();
+
+        // Allow Enter key for chat
+        document.getElementById('chatInput')?.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendChatMessage();
+        });
+    </script>
+</body>
+</html>
