@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Marketplace - NexusHub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            user-select: none; /* Prevent text selection */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+
+        .project-card {
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.5);
+        }
+
+        /* Watermark overlay */
+        .watermark {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            font-size: 3rem;
+            color: rgba(255, 255, 255, 0.05);
+            pointer-events: none;
+            z-index: 1000;
+            white-space: nowrap;
+            font-weight: bold;
+        }
+
+        /* Protected content indicator */
+        .protected-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 0, 0, 0.7);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <!-- Dynamic Watermark (will be populated with user IP/Email) -->
+    <div class="watermark" id="watermark">PROTECTED CONTENT</div>
+
+    <!-- Navigation -->
+    <nav class="glass fixed w-full top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="/nexushub-index.html" class="text-2xl font-bold text-white">NexusHub</a>
+                </div>
+                <div class="flex space-x-3">
+                    <a href="/login.html" class="glass px-4 py-2 rounded-lg text-white hover:bg-white/20 transition">Login</a>
+                    <a href="/register.html" class="bg-white text-purple-600 px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition">Sign Up</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="pt-24 pb-12 px-4">
+        <div class="max-w-7xl mx-auto">
+            <!-- Header -->
+            <div class="text-center mb-12">
+                <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">Project Marketplace</h1>
+                <p class="text-xl text-white/80">Discover real-world projects with expert mentorship</p>
+            </div>
+
+            <!-- Filters -->
+            <div class="glass rounded-xl p-6 mb-8">
+                <div class="grid md:grid-cols-4 gap-4">
+                    <div>
+                        <label class="block text-white/80 text-sm mb-2">Difficulty</label>
+                        <select id="difficultyFilter" class="w-full px-4 py-2 rounded-lg bg-white/10 text-white border border-white/20">
+                            <option value="">All Levels</option>
+                            <option value="beginner">Beginner</option>
+                            <option value="intermediate">Intermediate</option>
+                            <option value="advanced">Advanced</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-white/80 text-sm mb-2">Max Price</label>
+                        <input type="number" id="priceFilter" placeholder="Max $" class="w-full px-4 py-2 rounded-lg bg-white/10 text-white border border-white/20 placeholder-white/50">
+                    </div>
+                    <div>
+                        <label class="block text-white/80 text-sm mb-2">Technology</label>
+                        <input type="text" id="techFilter" placeholder="e.g., React, Python" class="w-full px-4 py-2 rounded-lg bg-white/10 text-white border border-white/20 placeholder-white/50">
+                    </div>
+                    <div class="flex items-end">
+                        <button onclick="applyFilters()" class="w-full bg-white text-purple-600 px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition">
+                            Apply Filters
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Projects Grid -->
+            <div id="projectsContainer" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Projects will be loaded here dynamically -->
+                <div class="text-center text-white col-span-full">
+                    <p>Loading projects...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Content Shield: Disable right-click
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            alert('⚠️ Content is protected. Right-click is disabled.');
+            return false;
+        });
+
+        // Content Shield: Disable copy
+        document.addEventListener('copy', function(e) {
+            e.preventDefault();
+            alert('⚠️ Content copying is disabled.');
+            return false;
+        });
+
+        // Content Shield: Disable cut
+        document.addEventListener('cut', function(e) {
+            e.preventDefault();
+            return false;
+        });
+
+        // Content Shield: Disable certain keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Disable Ctrl+C, Ctrl+X, Ctrl+U, F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C
+            if ((e.ctrlKey && (e.key === 'c' || e.key === 'x' || e.key === 'u')) ||
+                e.key === 'F12' ||
+                (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C'))) {
+                e.preventDefault();
+                alert('⚠️ This action is disabled for content protection.');
+                return false;
+            }
+        });
+
+        // Content Shield: Disable drag selection
+        document.addEventListener('selectstart', function(e) {
+            e.preventDefault();
+            return false;
+        });
+
+        // Dynamic Watermark with user info
+        async function setDynamicWatermark() {
+            try {
+                // Get user's IP (in production, fetch from backend)
+                const response = await fetch('https://api.ipify.org?format=json');
+                const data = await response.json();
+                const userIP = data.ip;
+                
+                // Get user email if logged in
+                const token = localStorage.getItem('token');
+                let userEmail = 'VISITOR';
+                
+                if (token) {
+                    const userResponse = await fetch('/api/auth/me', {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                    if (userResponse.ok) {
+                        const userData = await userResponse.json();
+                        userEmail = userData.user.email;
+                    }
+                }
+
+                const watermark = document.getElementById('watermark');
+                watermark.textContent = `${userEmail} - ${userIP} - PROTECTED`;
+                
+                // Create multiple watermarks for better coverage
+                for (let i = 0; i < 5; i++) {
+                    const extraWatermark = document.createElement('div');
+                    extraWatermark.className = 'watermark';
+                    extraWatermark.textContent = `${userEmail} - ${userIP}`;
+                    extraWatermark.style.top = `${20 + i * 20}%`;
+                    document.body.appendChild(extraWatermark);
+                }
+            } catch (error) {
+                console.error('Failed to set watermark:', error);
+            }
+        }
+
+        // Load projects from API
+        async function loadProjects() {
+            try {
+                const response = await fetch('/api/marketplace/projects');
+                const data = await response.json();
+
+                const container = document.getElementById('projectsContainer');
+                
+                if (!data.projects || data.projects.length === 0) {
+                    container.innerHTML = '<div class="text-white col-span-full text-center">No projects found</div>';
+                    return;
+                }
+
+                container.innerHTML = data.projects.map(project => `
+                    <div class="glass project-card rounded-xl p-6 relative">
+                        <span class="protected-badge">🔒 PROTECTED</span>
+                        <div class="text-3xl mb-4">💼</div>
+                        <h3 class="text-xl font-bold text-white mb-2">${escapeHtml(project.title)}</h3>
+                        <p class="text-white/70 text-sm mb-4 line-clamp-3">${escapeHtml(project.description)}</p>
+                        
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            ${project.tech_stack ? project.tech_stack.slice(0, 3).map(tech => 
+                                `<span class="bg-white/10 text-white text-xs px-2 py-1 rounded">${escapeHtml(tech)}</span>`
+                            ).join('') : ''}
+                        </div>
+                        
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-white/60 text-sm">${project.difficulty_level || 'N/A'}</span>
+                            <span class="text-white font-bold text-lg">$${project.price}</span>
+                        </div>
+                        
+                        <div class="text-white/60 text-sm mb-4">
+                            <p>📍 ${escapeHtml(project.center_name || 'Unknown Center')}</p>
+                            <p>👁️ ${project.views_count || 0} views • 🎓 ${project.purchases_count || 0} enrolled</p>
+                        </div>
+                        
+                        <a href="/project-details.html?id=${project.project_id}" class="block w-full bg-white text-purple-600 text-center px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition">
+                            View Details
+                        </a>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading projects:', error);
+                document.getElementById('projectsContainer').innerHTML = 
+                    '<div class="text-white col-span-full text-center">Failed to load projects</div>';
+            }
+        }
+
+        // Apply filters
+        async function applyFilters() {
+            const difficulty = document.getElementById('difficultyFilter').value;
+            const maxPrice = document.getElementById('priceFilter').value;
+            const tech = document.getElementById('techFilter').value;
+
+            let url = '/api/marketplace/projects?';
+            if (difficulty) url += `difficulty=${difficulty}&`;
+            if (maxPrice) url += `maxPrice=${maxPrice}&`;
+            if (tech) url += `techStack=${tech}&`;
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                const container = document.getElementById('projectsContainer');
+                if (!data.projects || data.projects.length === 0) {
+                    container.innerHTML = '<div class="text-white col-span-full text-center">No projects match your filters</div>';
+                    return;
+                }
+
+                // Re-render with filtered results (using same template as loadProjects)
+                container.innerHTML = data.projects.map(project => `
+                    <div class="glass project-card rounded-xl p-6 relative">
+                        <span class="protected-badge">🔒 PROTECTED</span>
+                        <div class="text-3xl mb-4">💼</div>
+                        <h3 class="text-xl font-bold text-white mb-2">${escapeHtml(project.title)}</h3>
+                        <p class="text-white/70 text-sm mb-4">${escapeHtml(project.description)}</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-white/60 text-sm">${project.difficulty_level}</span>
+                            <span class="text-white font-bold">$${project.price}</span>
+                        </div>
+                        <a href="/project-details.html?id=${project.project_id}" class="block w-full mt-4 bg-white text-purple-600 text-center px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition">
+                            View Details
+                        </a>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error applying filters:', error);
+            }
+        }
+
+        // Utility function to escape HTML
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Initialize
+        setDynamicWatermark();
+        loadProjects();
+
+        // Prevent screenshot attempts (display warning)
+        document.addEventListener('keyup', function(e) {
+            if (e.key === 'PrintScreen') {
+                alert('⚠️ Screenshots are monitored for this protected content.');
+            }
+        });
+    </script>
+</body>
+</html>
